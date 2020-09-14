@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using WordFinder.Config;
 using WordFinder.Utils;
 
 namespace WordFinder
@@ -10,7 +11,7 @@ namespace WordFinder
     {
         private static void Main(string[] args)
         {
-            
+
             //This code use a test matrix
             var testMatrix = GetTestMatrix();
             var testWordStream = GetTestsWordStream();

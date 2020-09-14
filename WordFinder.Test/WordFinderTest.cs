@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using NUnit.Framework;
+using WordFinder.Config;
 
 namespace WordFinder.Test
 {
@@ -12,7 +13,7 @@ namespace WordFinder.Test
         [SetUp]
         public void Setup()
         {
-            ConfigurationManager.AppSettings["wordsToReturn"] = "10";
+            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);           
         }
 
         [Test, Description("WordFinder constructor should throw an exception when parameter is empty")]

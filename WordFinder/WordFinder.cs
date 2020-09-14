@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
+using WordFinder.Config;
 using WordFinder.Utils;
 
 namespace WordFinder
@@ -33,9 +33,9 @@ namespace WordFinder
                 throw new ArgumentNullException(nameof(matrix));
             if (!matrix.Any())
                 throw new Exception($"{nameof(matrix)} must have values");
-            if (matrix.Any(x => x.Length != 64))
+            if (matrix.Any(x => x.Length != WordFinderConfig.WordFinder.MaxColumnSize))
                 throw new Exception("The matrix's strings must have 64 chars");
-            if (matrix.Count() != 64)
+            if (matrix.Count() != WordFinderConfig.WordFinder.MaxRowSize)
                 throw new Exception("The matrix must have 64 string items");
 
             this.matrix = matrix;
@@ -68,7 +68,7 @@ namespace WordFinder
 
         private IEnumerable<string> NormalizeResult(Dictionary<string, int> wordsCounter)
         {
-            var numbersToTake = Convert.ToInt32(ConfigurationManager.AppSettings["wordsToReturn"]);
+            var numbersToTake = WordFinderConfig.WordFinder.WordsToReturn;
             var words = (from wc in wordsCounter where wc.Value > 0 orderby wc.Value descending select wc.Key).Take(numbersToTake).ToList();
             while (words.Count() < numbersToTake)
             {
