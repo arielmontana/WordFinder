@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -9,13 +8,13 @@ namespace WordFinder
 {
     public class WordFinder
     {
-
         private readonly IEnumerable<string> matrix;
 
         private IEnumerable<string> _invertedMatrix;
-        private IEnumerable<string> InvertedMatrix 
+
+        private IEnumerable<string> InvertedMatrix
         {
-            get 
+            get
             {
                 if (_invertedMatrix == null)
                 {
@@ -26,29 +25,31 @@ namespace WordFinder
         }
 
         #region Public Methods
+
         public WordFinder(IEnumerable<string> matrix)
         {
             // New instance validations
-            if (matrix == null) 
+            if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
-            if (!matrix.Any()) 
+            if (!matrix.Any())
                 throw new Exception($"{nameof(matrix)} must have values");
-            if (matrix.Min(x => x.Length) != matrix.Max(x => x.Length))
-                throw new Exception("All matrix's strings should have the same length");
-            
+            if (matrix.Any(x => x.Length != 64))
+                throw new Exception("The matrix's strings must have 64 chars");
+            if (matrix.Count() != 64)
+                throw new Exception("The matrix must have 64 string items");
+
             this.matrix = matrix;
         }
 
         public IEnumerable<string> Find(IEnumerable<string> wordstream)
         {
-            if (wordstream == null) return new List<string>();
-
             var wordsCounter = CreateWordsCounter(wordstream);
             //Search words horizontally and update counter
             SearchWord(wordsCounter, matrix);
             //Search words vertically and update counter
             SearchWord(wordsCounter, InvertedMatrix);
-            return (from wc in wordsCounter where wc.Value > 0 orderby wc.Value descending select wc.Key).Take(10);
+            //Returns Top 10 words (complete with empty when is lower)
+            return NormalizeResult(wordsCounter);
         }
 
         private void SearchWord(Dictionary<string, int> wordsCounter, IEnumerable<string> matrix)
@@ -64,9 +65,19 @@ namespace WordFinder
                 }
             }
         }
-        
-        
-        #endregion
+
+        private IEnumerable<string> NormalizeResult(Dictionary<string, int> wordsCounter)
+        {
+            var numbersToTake = Convert.ToInt32(ConfigurationManager.AppSettings["wordsToReturn"]);
+            var words = (from wc in wordsCounter where wc.Value > 0 orderby wc.Value descending select wc.Key).Take(10).ToList();
+            while (words.Count() < numbersToTake)
+            {
+                words.Add(string.Empty);
+            }
+            return words;
+        }
+
+        #endregion Public Methods
 
         private Dictionary<string, int> CreateWordsCounter(IEnumerable<string> wordstream)
         {
@@ -80,6 +91,5 @@ namespace WordFinder
             }
             return wordsCounter;
         }
-
     }
 }

@@ -10,10 +10,16 @@ namespace WordFinder
     {
         private static void Main(string[] args)
         {
+            
             //This code use a test matrix
-            WordFinder wordFinder = new WordFinder(GetTestMatrix());
-            var words = wordFinder.Find(GetTestsWordStream());
+            var testMatrix = GetTestMatrix();
+            var testWordStream = GetTestsWordStream();
+            Console.Read();
+            WordFinder wordFinder = new WordFinder(testMatrix);
+            var words = wordFinder.Find(testWordStream);
+            Console.Read();
             PrintTestMatrix();
+
         }
 
         #region For Testing 
@@ -48,8 +54,9 @@ namespace WordFinder
         }
 
         private static IEnumerable<string> GetTestsWordStream() =>
-            new List<string>() { "admin", "hello", "down", "left", "drawing", "almost", "trouble", "choice", "goal",
-                                  "watch", "low", "commit"};
+            new List<string>() { "admin", "hello", "down", "left", "drawing", "almost", "trouble", 
+                                "choice", "goal", "watch", "low", "commit" };
+
 
         private static IEnumerable<string> GetTestMatrix(bool removeIndicators = true)
         {
