@@ -69,7 +69,7 @@ namespace WordFinder
         private IEnumerable<string> NormalizeResult(Dictionary<string, int> wordsCounter)
         {
             var numbersToTake = Convert.ToInt32(ConfigurationManager.AppSettings["wordsToReturn"]);
-            var words = (from wc in wordsCounter where wc.Value > 0 orderby wc.Value descending select wc.Key).Take(10).ToList();
+            var words = (from wc in wordsCounter where wc.Value > 0 orderby wc.Value descending select wc.Key).Take(numbersToTake).ToList();
             while (words.Count() < numbersToTake)
             {
                 words.Add(string.Empty);

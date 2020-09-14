@@ -14,10 +14,9 @@ namespace WordFinder
             //This code use a test matrix
             var testMatrix = GetTestMatrix();
             var testWordStream = GetTestsWordStream();
-            Console.Read();
             WordFinder wordFinder = new WordFinder(testMatrix);
             var words = wordFinder.Find(testWordStream);
-            Console.Read();
+            //this printer is not generic, the purpose is helps to identify visually the test matrix words
             PrintTestMatrix();
 
         }
@@ -52,12 +51,9 @@ namespace WordFinder
             }
             Console.WriteLine();
         }
-
         private static IEnumerable<string> GetTestsWordStream() =>
             new List<string>() { "admin", "hello", "down", "left", "drawing", "almost", "trouble", 
                                 "choice", "goal", "watch", "low", "commit" };
-
-
         private static IEnumerable<string> GetTestMatrix(bool removeIndicators = true)
         {
             string pattern = @"[\[\]']+";
@@ -146,6 +142,7 @@ namespace WordFinder
          * 11) low(1)    [vertical - (3,64)-(5,64)]
          * 12) commit(1) [horizontal(25, 40)-(25,46)]
 */ 
+
         #endregion
     }
 }
